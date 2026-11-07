@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * A settlement block: the geographic unit used by households, alerts,
@@ -25,6 +26,11 @@ class Block extends Model
             'longitude' => 'decimal:7',
             'estimated_population' => 'integer',
         ];
+    }
+
+    public function households(): HasMany
+    {
+        return $this->hasMany(Household::class);
     }
 
     public function getDisplayNameAttribute(): string

@@ -14,7 +14,7 @@ class BlockController extends Controller
     {
         $this->authorize('viewAny', Block::class);
 
-        $blocks = Block::query()->orderBy('code')->get();
+        $blocks = Block::withCount('households')->orderBy('code')->get();
 
         return view('blocks.index', ['blocks' => $blocks]);
     }

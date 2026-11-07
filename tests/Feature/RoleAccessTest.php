@@ -14,7 +14,7 @@ class RoleAccessTest extends TestCase
     public function test_guests_are_redirected_to_login(): void
     {
         $this->get('/dashboard')->assertRedirect('/login');
-        $this->get('/blocks')->assertRedirect('/login');
+        $this->get('/households')->assertRedirect('/login');
     }
 
     public function test_only_admins_can_open_user_management(): void
@@ -22,6 +22,12 @@ class RoleAccessTest extends TestCase
         $this->actingAs(User::factory()->fieldOfficer()->create())->get('/admin/users')->assertForbidden();
         $this->actingAs(User::factory()->coordinator()->create())->get('/admin/users')->assertForbidden();
         $this->actingAs(User::factory()->admin()->create())->get('/admin/users')->assertOk();
+    }
+
+    public function test_warehouse_officer_cannot_register_households(): void
+    {
+        $this->actingAs(User::factory()->warehouseOfficer()->create())
+            ->get('/households/create')->assertForbidden();
     }
 
     public function test_field_officer_cannot_manage_blocks(): void

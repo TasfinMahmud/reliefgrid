@@ -12,6 +12,9 @@
                     <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('households.*', 'tokens.*') ? 'active' : '' }}" href="{{ route('households.index') }}">Households</a>
+                </li>
+                <li class="nav-item">
                 @if($user->isManager())
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('blocks.*', 'admin.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Setup</a>
@@ -25,6 +28,11 @@
                     </li>
                 @endif
             </ul>
+
+            <form class="d-flex me-lg-3 mb-2 mb-lg-0" method="POST" action="{{ route('tokens.lookup') }}" role="search">
+                @csrf
+                <input class="form-control form-control-sm" type="search" name="token_uid" placeholder="Token UID lookup" aria-label="Token UID" required>
+            </form>
 
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
