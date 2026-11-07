@@ -34,6 +34,21 @@ class Block extends Model
         return $this->hasMany(Household::class);
     }
 
+    public function evacuationSites(): HasMany
+    {
+        return $this->hasMany(EvacuationSite::class);
+    }
+
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(Incident::class);
+    }
+
+    public function hazardAlerts(): BelongsToMany
+    {
+        return $this->belongsToMany(HazardAlert::class);
+    }
+
     public function assistanceCycles(): BelongsToMany
     {
         return $this->belongsToMany(AssistanceCycle::class);
