@@ -7,7 +7,7 @@
 
         <title>{{ config('app.name', 'ReliefGrid') }}</title>
 
-        @vite('resources/js/app.js')
+       @vite('resources/js/app.js')
     </head>
     <body>
         <div class="auth-wrapper d-flex flex-column align-items-center justify-content-center p-3">
