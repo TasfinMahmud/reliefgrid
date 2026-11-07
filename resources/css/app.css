@@ -1,0 +1,140 @@
+/* ReliefGrid – small layer on top of Bootstrap 5 */
+:root {
+    --rg-primary: #0b6e4f;
+    --rg-primary-dark: #084d38;
+    --rg-accent: #f2a541;
+    --rg-bg: #f4f6f5;
+}
+
+body {
+    --bs-body-bg: var(--rg-bg);
+    background-color: var(--rg-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main.rg-main {
+    flex: 1 0 auto;
+}
+
+.navbar-rg {
+    background: var(--rg-primary);
+}
+.navbar-rg .navbar-brand,
+.navbar-rg .nav-link {
+    color: #fff;
+}
+.navbar-rg .nav-link:hover,
+.navbar-rg .nav-link.active {
+    color: var(--rg-accent);
+}
+.navbar-rg .dropdown-menu {
+    font-size: 0.95rem;
+}
+
+/* Brand button, defined through Bootstrap 5.3 button variables so it is order-independent */
+.btn-rg {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--rg-primary);
+    --bs-btn-border-color: var(--rg-primary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--rg-primary-dark);
+    --bs-btn-hover-border-color: var(--rg-primary-dark);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--rg-primary-dark);
+    --bs-btn-active-border-color: var(--rg-primary-dark);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: var(--rg-primary);
+    --bs-btn-disabled-border-color: var(--rg-primary);
+    --bs-btn-focus-shadow-rgb: 11, 110, 79;
+}
+
+.stat-card {
+    border: 0;
+    border-left: 4px solid var(--rg-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.stat-card .stat-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+.stat-card .stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6c757d;
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+.page-header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.table-sm td,
+.table-sm th {
+    vertical-align: middle;
+}
+
+.timeline {
+    list-style: none;
+    padding-left: 0;
+    border-left: 2px solid #dee2e6;
+    margin-left: 0.5rem;
+}
+.timeline li {
+    position: relative;
+    padding: 0 0 1rem 1.25rem;
+}
+.timeline li::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 0.35rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--rg-primary);
+}
+
+/* Token card – printable */
+.token-card {
+    max-width: 420px;
+    border: 2px dashed var(--rg-primary);
+    border-radius: 12px;
+    background: #fff;
+}
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    body {
+        background: #fff;
+    }
+    .token-card {
+        border-style: solid;
+    }
+}
+
+.auth-card {
+    max-width: 440px;
+    width: 100%;
+}
+.auth-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--rg-primary) 0%, #0f8a63 60%, var(--rg-accent) 100%);
+}
+
+.required::after {
+    content: ' *';
+    color: #dc3545;
+}
