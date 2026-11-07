@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AssistanceCycleController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EntitlementRuleController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
@@ -38,6 +40,15 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('tokens/{token}/card', [TokenController::class, 'card'])->name('tokens.card');
     Route::post('tokens/{token}/revoke', [TokenController::class, 'revoke'])->name('tokens.revoke');
     Route::post('tokens/lookup', [TokenController::class, 'lookup'])->name('tokens.lookup');
+
+    // Feature 2 – Assistance cycles and entitlement planning
+    Route::resource('cycles', AssistanceCycleController::class)->parameters(['cycles' => 'cycle']);
+    Route::get('cycles/{cycle}/preview', [AssistanceCycleController::class, 'preview'])->name('cycles.preview');
+    Route::post('cycles/{cycle}/activate', [AssistanceCycleController::class, 'activate'])->name('cycles.activate');
+    Route::post('cycles/{cycle}/close', [AssistanceCycleController::class, 'close'])->name('cycles.close');
+    Route::post('cycles/{cycle}/rules', [EntitlementRuleController::class, 'store'])->name('cycles.rules.store');
+    Route::put('cycles/{cycle}/rules/{rule}', [EntitlementRuleController::class, 'update'])->name('cycles.rules.update');
+    Route::delete('cycles/{cycle}/rules/{rule}', [EntitlementRuleController::class, 'destroy'])->name('cycles.rules.destroy');
 
 });
 

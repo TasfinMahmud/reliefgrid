@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssistanceCycle;
 use App\Models\Block;
 use App\Models\Household;
 use App\Models\Item;
@@ -21,10 +22,14 @@ class DashboardController extends Controller
             'households_active' => Household::active()->count(),
             'households_total' => Household::count(),
             'tokens_active' => Token::where('status', 'active')->count(),
+            'cycles_active' => AssistanceCycle::active()->count(),
+            'cycles_draft' => AssistanceCycle::where('status', 'draft')->count(),
         ];
 
         $recentHouseholds = Household::with('block')->orderByDesc('id')->limit(8)->get();
 
-        return view('dashboard', compact('stats', 'recentHouseholds'));
+        $cycles = AssistanceCycle::withCount('entitlements')->orderByDesc('starts_on')->limit(5)->get();
+
+        return view('dashboard', compact('stats', 'recentHouseholds', 'cycles'));
     }
 }

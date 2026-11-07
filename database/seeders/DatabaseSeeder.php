@@ -8,6 +8,7 @@ use App\Models\Block;
 use App\Models\Household;
 use App\Models\Item;
 use App\Models\User;
+use App\Services\EntitlementPlanner;
 use App\Services\HouseholdService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -97,6 +98,35 @@ class DatabaseSeeder extends Seeder
         // One lost-token reissue and one deactivation to show history.
         $householdService->reissueToken($households[3], 'Card lost during heavy rain', $field);
         $householdService->deactivate($households[22], 'Family relocated to Camp 7', $coordinator);
+
+        // ------------------------------------------ Feature 2: assistance cycle
+        $planner = app(EntitlementPlanner::class);
+        $cycle = AssistanceCycle::create([
+            'name' => 'November 2026 general food distribution',
+            'description' => 'Monthly food basket for all active households.',
+            'starts_on' => '2026-11-10', 'ends_on' => '2026-11-20',
+            'status' => 'draft', 'created_by' => $coordinator->id,
+        ]);
+        $cycle->rules()->createMany([
+            ['item_id' => $items['RICE']->id, 'min_household_size' => 1, 'max_household_size' => null, 'base_quantity' => 0, 'per_member_quantity' => 12, 'max_quantity' => 96, 'notes' => '12 kg per person, capped at 8 persons'],
+            ['item_id' => $items['LENTIL']->id, 'min_household_size' => 1, 'max_household_size' => null, 'base_quantity' => 0, 'per_member_quantity' => 1.5, 'max_quantity' => 12],
+            ['item_id' => $items['OIL']->id, 'min_household_size' => 1, 'max_household_size' => 4, 'base_quantity' => 2, 'per_member_quantity' => 0],
+            ['item_id' => $items['OIL']->id, 'min_household_size' => 5, 'max_household_size' => null, 'base_quantity' => 4, 'per_member_quantity' => 0],
+            ['item_id' => $items['SALT']->id, 'min_household_size' => 1, 'max_household_size' => null, 'base_quantity' => 1, 'per_member_quantity' => 0],
+        ]);
+        $planner->activate($cycle, $coordinator);
+
+        $draft = AssistanceCycle::create([
+            'name' => 'December 2026 hygiene kits (Camp 4)',
+            'description' => 'Hygiene kit top-up for Camp 4 blocks only.',
+            'starts_on' => '2026-12-01', 'ends_on' => '2026-12-10',
+            'status' => 'draft', 'created_by' => $coordinator->id,
+        ]);
+        $draft->blocks()->sync($blocks->whereIn('code', ['B-01', 'B-02', 'B-03', 'B-04'])->pluck('id'));
+        $draft->rules()->createMany([
+            ['item_id' => $items['HYG-KIT']->id, 'min_household_size' => 1, 'max_household_size' => null, 'base_quantity' => 1, 'per_member_quantity' => 0],
+            ['item_id' => $items['SOAP']->id, 'min_household_size' => 1, 'max_household_size' => null, 'base_quantity' => 0, 'per_member_quantity' => 2],
+        ]);
 
         $this->command?->info('Demo data seeded. Log in with admin@reliefgrid.test / password (or coordinator@, field@, warehouse@, assessor@).');
     }

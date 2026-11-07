@@ -15,6 +15,8 @@
                     <a class="nav-link {{ request()->routeIs('households.*', 'tokens.*') ? 'active' : '' }}" href="{{ route('households.index') }}">Households</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('cycles.*') ? 'active' : '' }}" href="{{ route('cycles.index') }}">Assistance cycles</a>
+                </li>
                 @if($user->isManager())
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('blocks.*', 'admin.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Setup</a>

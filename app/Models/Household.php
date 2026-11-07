@@ -72,6 +72,11 @@ class Household extends Model
         return $this->hasMany(HouseholdEvent::class)->orderByDesc('created_at')->orderByDesc('id');
     }
 
+    public function entitlements(): HasMany
+    {
+        return $this->hasMany(Entitlement::class);
+    }
+
     // --- Scopes --------------------------------------------------------
 
     public function scopeActive(Builder $query): Builder
