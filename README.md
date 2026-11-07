@@ -17,7 +17,7 @@ twenty approved features:
 | 1 | Household registration and token issuance | ✅ Implemented |
 | 2 | Assistance cycle and entitlement planning | ✅ Implemented |
 | 5 | Warehouse and stock management | 🔄 In progress (Raihan) |
-| 12 | Shelter repair workflow | 🔄 In progress (Tuba) |
+| 12 | Shelter repair workflow | ✅ Implemented |
 | 14 | Preparedness and incident response | 🔄 In progress (Lamisa) |
 
 Feature descriptions, acceptance criteria and test scenarios are in [`docs/FEATURES.md`](docs/FEATURES.md).
