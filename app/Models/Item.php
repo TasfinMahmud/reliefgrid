@@ -36,6 +36,11 @@ class Item extends Model
         return $query->where('is_active', true);
     }
 
+    public function stockBatches(): HasMany
+    {
+        return $this->hasMany(StockBatch::class);
+    }
+
     public function entitlementRules(): HasMany
     {
         return $this->hasMany(EntitlementRule::class);
