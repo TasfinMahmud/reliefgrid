@@ -1,8 +1,7 @@
 # ReliefGrid — Feature definitions, acceptance criteria and test scenarios
 
-Numbering follows the approved 20-feature list in the project proposal. Features 1 and 2 are detailed
-here; Features 5, 12 and 14 are documented with their implementation in the next push, and the remaining
-features keep their numbers and will be documented when implemented.
+Numbering follows the approved 20-feature list in the project proposal. Only the Sprint 1 features are
+detailed here; the remaining features keep their numbers and will be documented when implemented.
 
 Supporting capabilities that are **not** counted as features: login, registration, logout, password reset,
 profile editing, user/role administration, and the Block and Item reference-data screens.
@@ -74,12 +73,29 @@ activation materialises entitlements and locks rules; confirmation required; clo
 
 ---
 
+## Feature 5 — Warehouse and stock management
+
+Documented in [`features/05-warehouse-and-stock-management.md`](features/05-warehouse-and-stock-management.md).
+
+---
+
+## Feature 12 — Shelter repair workflow
+
+Documented in [`features/12-shelter-repair-workflow.md`](features/12-shelter-repair-workflow.md).
+
+---
+
+## Feature 14 — Preparedness and incident response
+
+Documented in [`features/14-preparedness-and-incident-response.md`](features/14-preparedness-and-incident-response.md).
+
+---
+
 ## Supporting capabilities (not counted as features)
 
 * **Authentication** (Laravel Breeze): registration (always Field Officer), login with rate limiting, logout,
   password reset by email, profile and password update, account deletion. Deactivated accounts cannot log in and
   are logged out on their next request.
 * **Roles and permissions:** Administrator, Coordinator, Field Officer, Warehouse Officer, Shelter Assessor —
-  enforced by Policies (per action) and the `role` middleware (per route group). The warehouse and shelter
-  roles become active with Features 5 and 12.
+  enforced by Policies (per action) and the `role` middleware (per route group).
 * **Reference data:** settlement Blocks and the Item catalogue.

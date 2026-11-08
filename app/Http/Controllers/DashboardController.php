@@ -2,34 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AssistanceCycle;
-use App\Models\Block;
-use App\Models\Household;
-use App\Models\Item;
-use App\Models\Token;
-use App\Models\User;
+use App\Dashboard\WidgetRegistry;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * The dashboard is assembled from the widgets each feature registers in
+ * app/Dashboard/Widgets (see App\Dashboard\WidgetRegistry).
+ */
 class DashboardController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        $stats = [
-            'users_active' => User::where('is_active', true)->count(),
-            'blocks' => Block::count(),
-            'items' => Item::active()->count(),
-            'households_active' => Household::active()->count(),
-            'households_total' => Household::count(),
-            'tokens_active' => Token::where('status', 'active')->count(),
-            'cycles_active' => AssistanceCycle::active()->count(),
-            'cycles_draft' => AssistanceCycle::where('status', 'draft')->count(),
-        ];
+        $widgets = WidgetRegistry::all();
 
-        $recentHouseholds = Household::with('block')->orderByDesc('id')->limit(8)->get();
+        $cards = $widgets->flatMap(fn ($w) => $w->cards())->values();
+        $actions = $widgets->flatMap(fn ($w) => $w->actions())
+            ->filter(fn ($a) => $request->user()->can($a[3], $a[4]))
+            ->values();
+        $panels = $widgets->filter(fn ($w) => $w->view() !== null)->values();
 
-        $cycles = AssistanceCycle::withCount('entitlements')->orderByDesc('starts_on')->limit(5)->get();
-
-        return view('dashboard', compact('stats', 'recentHouseholds', 'cycles'));
+        return view('dashboard', compact('cards', 'actions', 'panels'));
     }
 }

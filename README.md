@@ -10,16 +10,15 @@ The application is built with **Laravel 12 (MVC)**, **Blade + Bootstrap 5** view
 ## Sprint 1 scope
 
 Sprint 1 delivers the supporting infrastructure (authentication, roles, reference data) and five of the
-twenty approved features. This push contains the infrastructure and Features 1 and 2; Features 5, 12 and 14
-follow in the next push.
+twenty approved features:
 
 | # | Feature | Status |
 |---|---------|--------|
 | 1 | Household registration and token issuance | ✅ Implemented |
 | 2 | Assistance cycle and entitlement planning | ✅ Implemented |
-| 5 | Warehouse and stock management | 🔄 In progress |
-| 12 | Shelter repair workflow | 🔄 In progress |
-| 14 | Preparedness and incident response | 🔄 In progress |
+| 5 | Warehouse and stock management | 🔄 In progress (Raihan) |
+| 12 | Shelter repair workflow | 🔄 In progress (Tuba) |
+| 14 | Preparedness and incident response | 🔄 In progress (Lamisa) |
 
 Feature descriptions, acceptance criteria and test scenarios are in [`docs/FEATURES.md`](docs/FEATURES.md).
 The MVC mapping of every component is in [`docs/MVC_MAPPING.md`](docs/MVC_MAPPING.md).
@@ -37,7 +36,7 @@ Sprint goals and attainment are tracked in [`docs/SPRINTS.md`](docs/SPRINTS.md).
 | Frontend | Blade templates, Bootstrap 5.3, Alpine.js, Vite; `qrcode` (client-side QR rendering) |
 | Database | PostgreSQL 16/17 (SQLite supported for quick local demos and used in-memory for the automated tests) |
 | Auth | Laravel Breeze (bcrypt password hashing, session authentication, rate-limited login) |
-| Testing | PHPUnit 11 feature tests (52 tests / 190+ assertions so far) |
+| Testing | PHPUnit 11 feature tests (52 tests so far; each feature adds its own) |
 
 ## Running the project on Windows
 
@@ -95,7 +94,7 @@ php artisan storage:link
 ```
 
 `migrate --seed` creates all tables and loads a demo dataset (6 blocks, 24 households with tokens, an active
-and a draft assistance cycle). To reset everything later: `php artisan migrate:fresh --seed`.
+and a draft assistance cycle; each feature adds its own demo data). To reset everything later: `php artisan migrate:fresh --seed`.
 
 ### 5. Run it
 
@@ -108,10 +107,10 @@ Open <http://localhost:8000> and log in with one of the demo accounts (password 
 | Email | Role | What they can do |
 |-------|------|------------------|
 | `admin@reliefgrid.test` | Administrator | Everything, including user and role management |
-| `coordinator@reliefgrid.test` | Coordinator | Activate assistance cycles, reactivate households, revoke tokens (later: approve transfers/repairs, alerts, incidents) |
-| `field@reliefgrid.test` | Field Officer | Register households, issue/reissue tokens (later: repair requests, incidents, occupancy) |
-| `warehouse@reliefgrid.test` | Warehouse Officer | View households and cycles (warehouse features arrive with Feature 5) |
-| `assessor@reliefgrid.test` | Shelter Assessor | View households and cycles (shelter features arrive with Feature 12) |
+| `coordinator@reliefgrid.test` | Coordinator | Activate cycles, approve transfers and repairs, issue alerts, verify incident closure |
+| `field@reliefgrid.test` | Field Officer | Register households, issue/reissue tokens, submit repair requests, report incidents, record evacuation occupancy |
+| `warehouse@reliefgrid.test` | Warehouse Officer | Receive and issue stock, request transfers, issue repair materials |
+| `assessor@reliefgrid.test` | Shelter Assessor | Assess repair requests, upload geo-tagged verification photos, complete repairs |
 
 Self-registration is open (`/register`) and always creates a Field Officer; an administrator promotes
 accounts from *Setup → Users & roles*.
@@ -129,7 +128,7 @@ PostgreSQL data.
 
 * **Models** (`app/Models`) are Eloquent models that own relationships, casts, scopes and small data
   helpers (e.g. `StockBatch::balance()`, `RepairStatus::canTransitionTo()`). Business rules that span several
-  models live in **service classes** (`app/Services`): `HouseholdService` and `EntitlementPlanner`. Enums in `app/Enums` define statuses, roles and
+  models live in **service classes** (`app/Services`): `HouseholdService`, `EntitlementPlanner` (one per feature). Enums in `app/Enums` define statuses, roles and
   the allowed workflow transitions.
 * **Views** (`resources/views`) are Blade templates with Bootstrap 5 markup. They only present data and
   collect input; they contain no business logic beyond `@can` checks for showing/hiding actions.
@@ -142,8 +141,13 @@ See [`docs/MVC_MAPPING.md`](docs/MVC_MAPPING.md) for a table of every model, vie
 
 ## Project structure
 
+Each feature is self-contained and plugs into the application through its own files (see
+[`CONTRIBUTING.md`](CONTRIBUTING.md)): a routes file, a navigation partial, a dashboard widget and a seeder are
+discovered automatically, so team members can develop features in parallel without touching shared files.
+
 ```
 app/
+  Dashboard/        Widget interface + registry; Widgets/<Feature>Widget.php per feature
   Enums/            Role, statuses, hazard types, workflow transition tables
   Http/Controllers/ One controller per resource/workflow (+ Admin/UserController, Auth/*)
   Http/Middleware/  EnsureUserHasRole (route-level roles), EnsureUserIsActive
@@ -153,12 +157,18 @@ app/
   Services/         Domain logic for each feature
 database/
   migrations/       Schema (PostgreSQL/SQLite compatible)
-  seeders/          Demo data (DatabaseSeeder)
+  seeders/          DatabaseSeeder (core data) + Features/<Feature>Seeder.php per feature
   factories/        Model factories used by tests and seeders
-resources/views/    Blade views grouped by feature
-routes/             web.php (features), auth.php (Breeze)
+resources/views/
+  layouts/nav/      One navigation partial per feature
+  dashboard/widgets/ One dashboard panel per feature
+  <feature>/        Blade views grouped by feature
+routes/
+  web.php           Core routes + loader for routes/features/*.php
+  features/         One routes file per feature
+  auth.php          Breeze authentication routes
 tests/Feature/      Feature tests per workflow (+ Breeze auth tests)
-docs/               Feature list, MVC mapping, sprint records
+docs/               Feature list (+ docs/features/*.md), MVC mapping, sprint records
 ```
 
 ## Significant third-party packages
@@ -177,8 +187,7 @@ stock ledger, workflow state machines and geo-tag validation are implemented in 
 
 ## Notes and known limitations (Sprint 1)
 
-* Features 5, 12 and 14 (warehouse, shelter repair, preparedness) are implemented and under final testing;
-  they arrive in the next push together with their seed data and tests.
+* Features 5, 12 and 14 are being integrated by their owners (see the table above).
 * The PWA/offline distribution mode, ML services (duplicate detection, complaint triage, damage grading) and
   the remaining features are scheduled for later sprints.
 * `composer.json` pins `config.platform.php` to 8.3.0 so dependency resolution stays compatible with PHP 8.3

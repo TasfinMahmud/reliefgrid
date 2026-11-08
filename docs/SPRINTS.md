@@ -28,10 +28,10 @@ One-week sprints. Each sprint starts (Saturday) with goals and ends (Friday) wit
 | Skeleton, auth, roles | Done | `app/Enums/Role.php`, `app/Policies`, Breeze tests |
 | Feature 1 | Done | `HouseholdRegistrationTest` (11 tests) |
 | Feature 2 | Done | `AssistanceCycleTest` (9 tests) |
-| Feature 5 | In progress | pushed in the next increment |
-| Feature 12 | In progress | pushed in the next increment |
-| Feature 14 | In progress | pushed in the next increment |
-| Tests & docs | In progress | `php artisan test`: 52 passed so far; `README.md`, `docs/` |
+| Feature 5 | In progress (Raihan) | integration via `routes/features/warehouse.php` |
+| Feature 12 | In progress (Tuba) | integration via `routes/features/shelter.php` |
+| Feature 14 | In progress (Lamisa) | integration via `routes/features/preparedness.php` |
+| Tests & docs | In progress | `php artisan test`: 52 passed so far; `README.md`, `docs/`, `CONTRIBUTING.md` |
 
 Blockers / lessons: PHP 8.5 resolves some Symfony packages to versions requiring PHP 8.4+, so
 `config.platform.php` is pinned to 8.3.0 in `composer.json` to keep the dependency set portable.

@@ -9,7 +9,8 @@ Laravel implements MVC as follows in ReliefGrid:
   The only logic they contain is presentation logic (`@can` to hide actions, formatting).
 * **Controller** — classes in `app/Http/Controllers`. Each action: authorises (Policy), validates
   (Form Request or inline rules), delegates to a service/model, and returns a view or redirect with a flash
-  message. Middleware (`auth`, `active`, `role:`) runs before controllers.
+  message. Middleware (`auth`, `active`, `role:`) runs before controllers. Routes are declared per feature in
+  `routes/features/*.php` and loaded by `routes/web.php`.
 
 ## Shared infrastructure
 
@@ -20,7 +21,7 @@ Laravel implements MVC as follows in ReliefGrid:
 | User admin | `User` | `admin/users/*` | `Admin\UserController`, `UserPolicy` |
 | Blocks | `Block` | `blocks/*` | `BlockController`, `BlockPolicy` |
 | Items | `Item` | `items/*` | `ItemController`, `ItemPolicy` |
-| Dashboard | (aggregates) | `dashboard` | `DashboardController` |
+| Dashboard | `Dashboard\Widget`, `Dashboard\WidgetRegistry` (+ one `Dashboard\Widgets\*Widget` per feature) | `dashboard`, `dashboard/widgets/*` | `DashboardController` |
 | Layout & components | — | `layouts/app`, `components/{flash,badge,input-error,confirm-form,modal-form}` | `View\Components\AppLayout`, `GuestLayout` |
 
 ## Feature 1 — Household registration and token issuance
