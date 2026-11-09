@@ -16,9 +16,9 @@ twenty approved features:
 |---|---------|--------|
 | 1 | Household registration and token issuance | ✅ Implemented |
 | 2 | Assistance cycle and entitlement planning | ✅ Implemented |
-| 5 | Warehouse and stock management | 🔄 In progress (Raihan) |
+| 5 | Warehouse and stock management | ✅ Implemented |
 | 12 | Shelter repair workflow | ✅ Implemented |
-| 14 | Preparedness and incident response | 🔄 In progress (Lamisa) |
+| 14 | Preparedness and incident response | ✅ Implemented |
 
 Feature descriptions, acceptance criteria and test scenarios are in [`docs/FEATURES.md`](docs/FEATURES.md).
 The MVC mapping of every component is in [`docs/MVC_MAPPING.md`](docs/MVC_MAPPING.md).
